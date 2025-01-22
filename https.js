@@ -1,5 +1,7 @@
 const http = require('http');
 const { v4: uuidv4 } = require('uuid');
+const fs = require('fs/promises');
+const path = require('path');
 const PORT = 5000;
 
 http.createServer((req , res)=>{
@@ -15,23 +17,9 @@ http.createServer((req , res)=>{
     }
 }).listen(PORT , ()=> console.log("server is running now"));
 
-function htmlBody(res){
+async function htmlBody(res){
 
-    const htmlContent = `
-        <!DOCTYPE html>
-        <html>
-        <head>
-        </head>
-        <body style="color: orange; background-color: grey">
-            <h1>Any fool can write code that a computer can understand. Good programmers write code that humans can understand.</h1>
-            <br>
-            <p> - Martin Fowler</p>
-
-        </body>
-        </html>
-    `;
-
-
+    const htmlContent = await fs.readFile(path.join(__dirname , "/index.html") , 'utf-8');
     res.writeHead(400 , {"content-type" : "text/html"});
     res.end(htmlContent);
 }
