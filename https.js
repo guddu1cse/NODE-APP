@@ -12,7 +12,11 @@ http.createServer((req , res)=>{
         jsonBody(res);
     }else if(req.url == "/uuid"){
         uuidBody(res);
-    } else {
+    } else if(req.url.includes("delay")){
+      const time = parseInt(req.url.substring(req.url.lastIndexOf("/")+1));
+      delay(res , time);
+    }
+    else{
        help(res);
     }
 }).listen(PORT , ()=> console.log("server is running now"));
@@ -24,29 +28,8 @@ async function htmlBody(res){
     res.end(htmlContent);
 }
 
-function jsonBody(res){
-
-    const jsonData = `{
-  "slideshow": {
-    "author": "Yours Truly",
-    "date": "date of publication",
-    "slides": [
-      {
-        "title": "Wake up to WonderWidgets!",
-        "type": "all"
-      },
-      {
-        "items": [
-          "Why <em>WonderWidgets</em> are great",
-          "Who <em>buys</em> WonderWidgets"
-        ],
-        "title": "Overview",
-        "type": "all"
-      }
-    ],
-    "title": "Sample Slide Show"
-  }}`;
-
+async function jsonBody(res){
+    const jsonData = await fs.readFile(path.join(__dirname , "/jsonBody.json") , 'utf-8');
     res.writeHead(200);
     res.end(JSON.stringify(JSON.parse(jsonData) , null , 2));
 }
@@ -69,4 +52,14 @@ function help(res){
 
     res.writeHead(404);
     res.end(JSON.stringify(obj1 , null , 2));
+}
+
+function delay(res , time){
+  
+  new Promise((resolve, reject)=>{
+    setTimeout(()=> resolve(`response delay ${time}`) , time * 1000);
+  }).then((time)=>{
+    res.writeHead(200);
+    res.end(time);
+  });
 }
