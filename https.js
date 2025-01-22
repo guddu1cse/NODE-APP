@@ -64,10 +64,12 @@ function jsonBody(res){
 }
 
 function uuidBody(res){
-    const uniqueId = uuidv4();
-    console.log(uniqueId);
+    const uuidBody = {
+      uuidv4 : uuidv4()
+    }
+    console.log(uuidBody.uuidv4);
     res.writeHead(300);
-    res.end(uniqueId);
+    res.end(JSON.stringify(uuidBody , null , 2));
 }
 
 function help(res){
