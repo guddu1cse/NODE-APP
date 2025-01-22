@@ -1,6 +1,6 @@
 const http = require('http');
 const { v4: uuidv4 } = require('uuid');
-
+const PORT = 5000;
 
 http.createServer((req , res)=>{
     console.log(req.url);
@@ -13,7 +13,7 @@ http.createServer((req , res)=>{
     } else {
        help(res);
     }
-}).listen(5000 , ()=> console.log("server is running now"));
+}).listen(PORT , ()=> console.log("server is running now"));
 
 function htmlBody(res){
 
@@ -32,7 +32,7 @@ function htmlBody(res){
     `;
 
 
-    res.writeHead(200 , {"content-type" : "text/html"});
+    res.writeHead(400 , {"content-type" : "text/html"});
     res.end(htmlContent);
 }
 
@@ -66,6 +66,7 @@ function jsonBody(res){
 function uuidBody(res){
     const uniqueId = uuidv4();
     console.log(uniqueId);
+    res.writeHead(300);
     res.end(uniqueId);
 }
 
@@ -76,5 +77,6 @@ function help(res){
         UUID: "/uuid"
     }
 
+    res.writeHead(404);
     res.end(JSON.stringify(obj1 , null , 2));
 }
