@@ -15,8 +15,9 @@ http.createServer((req , res)=>{
     } else if(req.url.includes("delay")){
       const time = parseInt(req.url.substring(req.url.lastIndexOf("/")+1));
       delay(res , time);
-    }
-    else{
+    } else if(req.url.includes("status")){
+      status(res , parseInt(req.url.substring(req.url.lastIndexOf("/")+1)));
+    } else{
        help(res);
     }
 }).listen(PORT , ()=> console.log("server is running now"));
@@ -43,11 +44,17 @@ function uuidBody(res){
     res.end(JSON.stringify(uuidBody , null , 2));
 }
 
+function status(res , statusCode){
+  res.writeHead(statusCode);
+  res.end(`Status code is ${statusCode}`);
+}
+
 function help(res){
     const obj1 = {
         Home: "/home",
         JSON: "/json",
-        UUID: "/uuid"
+        UUID: "/uuid",
+        STATUS: "/status/{httStatusCode}"
     }
 
     res.writeHead(404);
