@@ -4,14 +4,25 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.post('/home/:message/:now' , (req , res)=>{
+app.post('/home/:id/:name' , (req , res)=>{
+    console.log(`${req.protocol}//${req.get('host')}${req.originalUrl}`);
     const prams = req.params
     const requestParam = req.query;
     const reqData = req.body || {Body :[req.body]};
     console.log(reqData);
     console.log(requestParam);
     console.log(prams);
-    res.end(`path variables => ${Object.values(prams)} \nrequest prams => ${Object.values(requestParam)} \n Body => ${Object.entries(reqData)}`);
+    setTimeout(()=>{
+        
+        res.status(requestParam.status);
+        res.json({
+            pathParams: prams,
+            queryParams: requestParam,
+            bodyData: reqData,
+            fullUrl: `${req.protocol}//${req.get('host')}${req.originalUrl}`,
+        });
+
+    }, requestParam.delay * 1000);
 });
 
 const PORT = process.env.PORT || 4041;
