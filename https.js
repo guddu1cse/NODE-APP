@@ -25,7 +25,7 @@ http.createServer((req , res)=>{
 async function htmlBody(res){
 
     const htmlContent = await fs.readFile(path.join(__dirname , "/index.html") , 'utf-8');
-    res.writeHead(400 , {"content-type" : "text/html"});
+    res.writeHead(400 , {"Content-Type": "text/html"});
     res.end(htmlContent);
 }
 
